@@ -1,9 +1,9 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-const gridSize = 20; 
-const tileCountX = canvas.width / gridSize;  
-const tileCountY = canvas.height / gridSize; 
+const gridSize = 20;
+const tileCountX = canvas.width / gridSize;
+const tileCountY = canvas.height / gridSize;
 
 let snake = [];
 let food = { x: 0, y: 0 };
@@ -13,8 +13,8 @@ let currentLevel = 1;
 let targetScore = 100;
 let currentGrid = [];
 let gameInterval = null;
-let isGameStarted = false; 
-let isPaused = false; 
+let isGameStarted = false;
+let isPaused = false;
 let currentTheme = THEMES.SPRING; // Mặc định Mùa Xuân
 const GAME_SPEED = 550;
 
@@ -48,7 +48,7 @@ function startMusic() {
         isMusicStarted = true;
         playCurrentTrack();
     } else if (bgMusic.paused && !isMuted) {
-        bgMusic.play().catch(() => {});
+        bgMusic.play().catch(() => { });
     }
 }
 
@@ -57,7 +57,7 @@ function playCurrentTrack() {
     if (playlist.length === 0) return;
     bgMusic.src = playlist[currentTrackIndex];
     bgMusic.muted = isMuted;
-    bgMusic.play().catch(() => {});
+    bgMusic.play().catch(() => { });
 }
 
 // Khi hết bài -> tự động chuyển bài tiếp theo (hết 3 bài thì tráo lượt mới)
@@ -120,10 +120,10 @@ function applyRandomTheme() {
 function enterGameFullscreen() {
     startMusic(); // Phát nhạc ngẫu nhiên khi bấm Bắt đầu chơi
     if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen().catch(() => {});
+        document.documentElement.requestFullscreen().catch(() => { });
     }
     if (screen.orientation && screen.orientation.lock) {
-        screen.orientation.lock("landscape").catch(() => {});
+        screen.orientation.lock("landscape").catch(() => { });
     }
 
     document.getElementById("startScreen").classList.add("hidden");
@@ -133,12 +133,12 @@ function enterGameFullscreen() {
 
 function exitGameFullscreen() {
     if (document.exitFullscreen && document.fullscreenElement) {
-        document.exitFullscreen().catch(() => {});
+        document.exitFullscreen().catch(() => { });
     }
     if (screen.orientation && screen.orientation.unlock) {
         screen.orientation.unlock();
     }
-    
+
     if (gameInterval) clearInterval(gameInterval);
     isPaused = false;
     isGameStarted = false;
@@ -186,6 +186,14 @@ function startRandomGame() {
     startGame(Number(randomLevel));
 }
 
+let animFrameId = null;
+
+// Hàm tính sóng nhấp nháy phát sáng Neon (chu kỳ lặp lại đúng 1 giây = 1000ms)
+function getNeonPulse() {
+    const now = Date.now();
+    return (Math.sin((now / 1000) * Math.PI * 2) + 1) / 2; // Dao động mượt từ 0 đến 1
+}
+
 function resetGame() {
     score = 0;
     dx = 0; dy = 0;
@@ -196,28 +204,93 @@ function resetGame() {
     generateFood();
 
     if (gameInterval) clearInterval(gameInterval);
-    gameInterval = setInterval(gameLoop, GAME_SPEED);
+    gameInterval = setInterval(updateGameState, GAME_SPEED);
+
+    startRenderLoop();
 }
 
-function gameLoop() {
+function updateGameState() {
     if (isGameStarted && !isPaused) {
         moveSnake();
         if (checkCollision()) return;
     }
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawMap();
-    drawFood();
-    drawSnake();
 }
 
-// Vẽ Vật cản theo màu Wall của Mùa
+function startRenderLoop() {
+    if (animFrameId) cancelAnimationFrame(animFrameId);
+
+    function renderLoop() {
+        if (!document.getElementById("gameScreen").classList.contains("hidden")) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawMap();
+            drawFood();
+            drawSnake();
+            animFrameId = requestAnimationFrame(renderLoop);
+        }
+    }
+    animFrameId = requestAnimationFrame(renderLoop);
+}
+
+// Preload ảnh bản đồ 4 mùa để cắt vẽ từng ô grid cell
+const seasonImages = {};
+if (typeof THEMES !== 'undefined') {
+    Object.keys(THEMES).forEach(key => {
+        if (THEMES[key].image) {
+            const img = new Image();
+            img.src = THEMES[key].image;
+            seasonImages[key] = img;
+        }
+    });
+}
+
+function gameLoop() {
+    updateGameState();
+}
+
+// Vẽ Bản đồ: Mỗi 1 ô grid cell (20px x 20px) hiển thị 1 ảnh bản đồ với độ mờ mượt nhẹ + viền ô lưới + vật cản
 function drawMap() {
+    let activeKey = Object.keys(THEMES).find(k => THEMES[k].name === currentTheme.name) || "SPRING";
+    const mapImg = seasonImages[activeKey];
+    const rows = Math.floor(canvas.height / gridSize); // 10 hàng
+    const cols = tileCountX; // 20 cột
+
+    // 1. Vẽ trọn vẹn 1 bức ảnh bản đồ vào từng ô grid cell với độ mờ mượt (globalAlpha = 0.65) để nâng độ nổi cho Rắn
+    if (mapImg && mapImg.complete && mapImg.naturalWidth !== 0) {
+        ctx.save();
+        ctx.globalAlpha = 0.65;
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                const dx = c * gridSize;
+                const dy = r * gridSize;
+
+                ctx.drawImage(mapImg, dx, dy, gridSize, gridSize);
+            }
+        }
+        ctx.restore();
+    }
+
+    // 2. Kẻ đường viền ô vuông lưới (grid lines) bao quanh từng ô grid cell trên bàn chơi
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.15)";
+    ctx.lineWidth = 1;
+    for (let r = 0; r <= rows; r++) {
+        ctx.beginPath();
+        ctx.moveTo(0, r * gridSize);
+        ctx.lineTo(canvas.width, r * gridSize);
+        ctx.stroke();
+    }
+    for (let c = 0; c <= cols; c++) {
+        ctx.beginPath();
+        ctx.moveTo(c * gridSize, 0);
+        ctx.lineTo(c * gridSize, canvas.height);
+        ctx.stroke();
+    }
+
+    // 3. Vẽ Vật cản / Tường trên từng ô grid cell có giá trị 1
     ctx.fillStyle = currentTheme.wall;
     for (let r = 0; r < currentGrid.length; r++) {
-        for (let c = 0; c < tileCountX; c++) {
+        for (let c = 0; c < cols; c++) {
             if (currentGrid[r][c] === 1) {
-                ctx.fillRect(c * gridSize, r * gridSize, gridSize - 1, gridSize - 1);
+                ctx.fillRect(c * gridSize + 1, r * gridSize + 1, gridSize - 2, gridSize - 2);
             }
         }
     }
@@ -254,11 +327,26 @@ function getGridDirection(p1, p2) {
     return { dirX, dirY };
 }
 
-// Vẽ Rắn sử dụng Hình ảnh Đầu, Thân, Đuôi
+// Vẽ Rắn sử dụng Hình ảnh Đầu, Thân, Đuôi kết hợp Hiệu ứng Viền Phát Sáng Neon nhấp nháy mượt 1s (1Hz)
 function drawSnake() {
+    const pulse = getNeonPulse();
+
+    ctx.save();
+    // Tạo phát sáng màu Neon nhấp nháy 1s (độ blur biến thiên từ 4px đến 16px)
+    ctx.shadowColor = currentTheme.snakeHead || "#81C784";
+    ctx.shadowBlur = 4 + pulse * 12;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+
     snake.forEach((part, index) => {
         const x = part.x * gridSize;
         const y = part.y * gridSize;
+
+        // Lớp đệm viền đen biến thiên nhẹ mượt theo nhịp nhấp nháy 1s
+        ctx.fillStyle = `rgba(0, 0, 0, ${0.35 + pulse * 0.25})`;
+        ctx.beginPath();
+        ctx.arc(x + gridSize / 2, y + gridSize / 2, gridSize / 2 - 0.5, 0, Math.PI * 2);
+        ctx.fill();
 
         if (index === 0) {
             // ĐẦU RẮN
@@ -301,12 +389,24 @@ function drawSnake() {
             }
         }
     });
+
+    ctx.restore();
 }
 
-// Vẽ Mồi theo màu Food của Mùa
+// Vẽ Mồi theo màu Food của Mùa kết hợp hiệu ứng phát sáng Neon nhấp nháy 1s mượt mà
 function drawFood() {
+    const pulse = getNeonPulse();
+
+    ctx.save();
+    ctx.shadowColor = currentTheme.food;
+    ctx.shadowBlur = 6 + pulse * 14; // Nhấp nháy mượt mà 60FPS
+
     ctx.fillStyle = currentTheme.food;
-    ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 1, gridSize - 1);
+    ctx.beginPath();
+    ctx.arc(food.x * gridSize + gridSize / 2, food.y * gridSize + gridSize / 2, gridSize / 2 - 1.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
 }
 
 function moveSnake() {
@@ -325,7 +425,7 @@ function moveSnake() {
     if (head.x === food.x && head.y === food.y) {
         score += 10;
         updateScoreUI();
-        
+
         if (score >= targetScore) {
             clearInterval(gameInterval);
             showResultModal(true);
@@ -495,11 +595,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const buttons = document.querySelectorAll(".dpad-controls .btn");
-    
+
     buttons.forEach(btn => {
         btn.addEventListener("touchstart", (e) => {
             e.preventDefault();
-            
+
             if (btn.classList.contains("btn-up")) changeDirection('UP');
             if (btn.classList.contains("btn-down")) changeDirection('DOWN');
             if (btn.classList.contains("btn-left")) changeDirection('LEFT');
@@ -512,4 +612,4 @@ document.addEventListener("DOMContentLoaded", () => {
             btn.classList.remove("active-touch");
         });
     });
-});
+});

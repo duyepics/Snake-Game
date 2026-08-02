@@ -23,7 +23,8 @@ body {
     width: 100%;
     height: 100%;
     position: absolute;
-    top: 0; left: 0;
+    top: 0;
+    left: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -163,13 +164,17 @@ canvas {
     transition: all 0.3s ease;
 }
 
-.btn:active, .btn.active-touch {
+.btn:active,
+.btn.active-touch {
     transform: scale(0.92);
 }
 
 .modal {
     position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(0, 0, 0, 0.92);
     display: flex;
     justify-content: center;
@@ -190,7 +195,8 @@ canvas {
     overflow-y: auto;
 }
 
-button.big-btn, .menu-buttons button {
+button.big-btn,
+.menu-buttons button {
     background-color: transparent;
     border: 2px solid #4CAF50;
     color: #4CAF50;
@@ -203,7 +209,8 @@ button.big-btn, .menu-buttons button {
     width: 100%;
 }
 
-button.big-btn:active, .menu-buttons button:active {
+button.big-btn:active,
+.menu-buttons button:active {
     opacity: 0.8;
 }
 
@@ -402,8 +409,10 @@ button.big-btn:active, .menu-buttons button:active {
 .orientation-modal {
     display: none;
     position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     background-color: rgba(13, 13, 13, 0.96);
     z-index: 10000;
     flex-direction: column;
@@ -434,9 +443,18 @@ button.big-btn:active, .menu-buttons button:active {
 }
 
 @keyframes rotatePhoneAnim {
-    0% { transform: rotate(0deg); }
-    40%, 60% { transform: rotate(90deg); }
-    100% { transform: rotate(0deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    40%,
+    60% {
+        transform: rotate(90deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
 }
 
 .orientation-content h2 {
@@ -473,4 +491,4 @@ body.force-landscape {
 
 body.force-landscape .orientation-modal {
     display: none !important;
-}
+}
