@@ -1,0 +1,254 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+body {
+    background-color: #0d0d0d;
+    color: #4CAF50;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+.screen {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0; left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.hidden {
+    display: none !important;
+}
+
+h1 {
+    font-size: 2.2rem;
+    color: #4CAF50;
+    margin-bottom: 25px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    color: #81C784;
+    margin-bottom: 20px;
+}
+
+#gameScreen {
+    display: flex;
+    flex-direction: row;
+    padding: 12px;
+    gap: 15px;
+    background-color: #000;
+    transition: background-color 0.4s ease;
+}
+
+.left-panel {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+canvas {
+    background-color: #050505;
+    border: 3px solid #4CAF50;
+    border-radius: 8px;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: border-color 0.4s ease, background-color 0.4s ease;
+}
+
+.right-panel {
+    width: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.top-info {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.score-box {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+}
+
+/* THÊM THẺ THỂ HIỆN TÊN MÙA */
+.season-tag {
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+    letter-spacing: 0.5px;
+}
+
+.score-label {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.score-value {
+    font-size: 1.2rem;
+}
+
+.menu-icon-btn {
+    background-color: transparent;
+    border: 2px solid #4CAF50;
+    color: #4CAF50;
+    font-size: 1.6rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
+    transition: all 0.3s ease;
+}
+
+.menu-icon-btn:active {
+    transform: scale(0.9);
+}
+
+.dpad-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 2px;
+}
+
+.dpad-row {
+    display: flex;
+    gap: 36px;
+}
+
+.btn {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 3px solid #4CAF50;
+    color: #4CAF50;
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    transition: all 0.3s ease;
+}
+
+.btn:active, .btn.active-touch {
+    transform: scale(0.92);
+}
+
+.modal {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.92);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.modal-content {
+    background: #111;
+    border: 2px solid #4CAF50;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    color: #4CAF50;
+    width: 90%;
+    max-width: 380px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+button.big-btn, .menu-buttons button {
+    background-color: transparent;
+    border: 2px solid #4CAF50;
+    color: #4CAF50;
+    padding: 12px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 5px 0;
+    width: 100%;
+}
+
+button.big-btn:active, .menu-buttons button:active {
+    opacity: 0.8;
+}
+
+.exit-fs-btn {
+    border-color: #FF9800 !important;
+    color: #FF9800 !important;
+}
+
+.exit-fs-btn:active {
+    background-color: #FF9800 !important;
+    color: #000 !important;
+}
+
+.level-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin: 15px 0;
+}
+
+.level-btn {
+    padding: 8px 4px;
+    font-size: 0.85rem;
+    background-color: transparent;
+    border: 1px solid #4CAF50;
+    color: #4CAF50;
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.level-btn span {
+    font-size: 0.7rem;
+    color: #81C784;
+}
+
+.level-btn:active {
+    background-color: #4CAF50;
+    color: #000;
+}
+
+.close-btn {
+    border-color: #FF5252 !important;
+    color: #FF5252 !important;
+}
+
+.close-btn:active {
+    background-color: #FF5252 !important;
+    color: #fff !important;
+}

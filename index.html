@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Game Con Rắn Mobile</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- MÀN HÌNH BAN ĐẦU -->
+    <div id="startScreen" class="screen">
+        <h1>RẮN SĂN MỒI</h1>
+        <button class="big-btn" onclick="enterGameFullscreen()">🎮 BẮT ĐẦU CHƠI</button>
+    </div>
+
+    <!-- MÀN HÌNH CHỌN CHẾ ĐỘ -->
+    <div id="mainMenu" class="screen hidden">
+        <h2>CHỌN CHẾ ĐỘ CHƠI</h2>
+        <div class="menu-buttons">
+            <button onclick="showLevelSelect()">CHỌN LEVEL (1 - 15)</button>
+            <button onclick="startRandomGame()">CHƠI NGẪU NHIÊN</button>
+            <button class="exit-fs-btn" onclick="exitGameFullscreen()">⤢ THOÁT TOÀN MÀN HÌNH</button>
+        </div>
+    </div>
+
+    <!-- POPUP CHỌN LEVEL -->
+    <div id="levelSelectModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>DANH SÁCH MÀN CHƠI</h3>
+            <div id="levelGrid" class="level-grid"></div>
+            <button class="close-btn" onclick="hideLevelSelect()">Đóng</button>
+        </div>
+    </div>
+
+    <!-- POPUP TẠM DỪNG GAME -->
+    <div id="pauseModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>TẠM DỪNG GAME</h2>
+            <div class="menu-buttons">
+                <button onclick="resumeGame()">▶ TIẾP TỤC CHƠI</button>
+                <button onclick="restartCurrentLevel()">🔄 CHƠI LẠI MÀN NÀY</button>
+                <button onclick="exitToMenu()">◄ VỀ MENU CHÍNH</button>
+                <button class="exit-fs-btn" onclick="exitGameFullscreen()">⤢ THOÁT TOÀN MÀN HÌNH</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUP THÔNG BÁO THẮNG / THUA -->
+    <div id="resultModal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="resultTitle">CHIẾN THẮNG!</h2>
+            <p id="resultMessage" style="margin: 15px 0; font-size: 1.1rem;"></p>
+            <div class="menu-buttons">
+                <button id="nextLevelBtn" onclick="nextLevel()">MÀN TIẾP THEO ➔</button>
+                <button id="restartBtn" onclick="restartCurrentLevel()">🔄 CHƠI LẠI</button>
+                <button onclick="exitToMenu()">◄ VỀ MENU CHÍNH</button>
+                <button class="exit-fs-btn" onclick="exitGameFullscreen()">⤢ THOÁT TOÀN MÀN HÌNH</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MÀN HÌNH CHƠI GAME IN-GAME -->
+    <div id="gameScreen" class="screen hidden">
+        <div class="left-panel">
+            <canvas id="gameCanvas" width="400" height="250"></canvas>
+        </div>
+
+        <div class="right-panel">
+            <div class="top-info">
+                <div class="score-box">
+                    <span class="score-label">Điểm:</span>
+                    <span id="scoreInfo" class="score-value">0/100</span>
+                </div>
+                <button class="menu-icon-btn" onclick="openPauseMenu()">☰</button>
+            </div>
+
+            <div class="dpad-controls">
+                <button class="btn btn-up" onclick="changeDirection('UP')">▲</button>
+                <div class="dpad-row">
+                    <button class="btn btn-left" onclick="changeDirection('LEFT')">◄</button>
+                    <button class="btn btn-right" onclick="changeDirection('RIGHT')">►</button>
+                </div>
+                <button class="btn btn-down" onclick="changeDirection('DOWN')">▼</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="JS/maps.js"></script>
+    <script src="JS/game.js"></script>
+</body>
+</html>
