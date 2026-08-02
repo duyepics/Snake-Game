@@ -6,9 +6,21 @@ const tileCountX = canvas.width / gridSize;
 const tileCountY = canvas.height / gridSize;
 
 let snake = [];
-let food = { x: 0, y: 0 };
+let food = { x: 0, y: 0, img: null, isSpecial: false };
+let foodEatenCount = 0;
 let dx = 0, dy = 0;
 let score = 0;
+
+// Preload Food Images
+const normalFoodSrcs = ["images/food1.png", "images/food2.png", "images/food3.png"];
+const normalFoodImages = normalFoodSrcs.map(src => {
+    const img = new Image();
+    img.src = src;
+    return img;
+});
+
+const specialFoodImg = new Image();
+specialFoodImg.src = "images/food special.png";
 let currentLevel = 1;
 let targetScore = 100;
 let currentGrid = [];
@@ -196,6 +208,7 @@ function getNeonPulse() {
 
 function resetGame() {
     score = 0;
+    foodEatenCount = 0;
     dx = 0; dy = 0;
     isGameStarted = false;
     isPaused = false;
@@ -251,13 +264,13 @@ function gameLoop() {
 function drawMap() {
     let activeKey = Object.keys(THEMES).find(k => THEMES[k].name === currentTheme.name) || "SPRING";
     const mapImg = seasonImages[activeKey];
-    const rows = Math.floor(canvas.height / gridSize); // 10 hàng
+    const rows = Math.ceil(canvas.height / gridSize); // Phủ kín toàn bộ các hàng đến mép dưới canvas
     const cols = tileCountX; // 20 cột
 
-    // 1. Vẽ trọn vẹn 1 bức ảnh bản đồ vào từng ô grid cell với độ mờ mượt (globalAlpha = 0.65) để nâng độ nổi cho Rắn
+    // 1. Vẽ trọn vẹn 1 bức ảnh bản đồ vào từng ô grid cell với độ mờ 50% (globalAlpha = 0.50) để nâng độ nổi cho Rắn
     if (mapImg && mapImg.complete && mapImg.naturalWidth !== 0) {
         ctx.save();
-        ctx.globalAlpha = 0.65;
+        ctx.globalAlpha = 0.5;
         for (let r = 0; r < rows; r++) {
             for (let c = 0; c < cols; c++) {
                 const dx = c * gridSize;
@@ -393,18 +406,31 @@ function drawSnake() {
     ctx.restore();
 }
 
-// Vẽ Mồi theo màu Food của Mùa kết hợp hiệu ứng phát sáng Neon nhấp nháy 1s mượt mà
+// Vẽ Mồi theo ảnh Food (food1, food2, food3 ngẫu nhiên hoặc food special) kết hợp hiệu ứng phát sáng Neon
 function drawFood() {
     const pulse = getNeonPulse();
+    const x = food.x * gridSize;
+    const y = food.y * gridSize;
 
     ctx.save();
-    ctx.shadowColor = currentTheme.food;
-    ctx.shadowBlur = 6 + pulse * 14; // Nhấp nháy mượt mà 60FPS
+    if (food.isSpecial) {
+        // Special food: Neon Vàng phát sáng rực rỡ
+        ctx.shadowColor = "#FFD700";
+        ctx.shadowBlur = 10 + pulse * 18;
+    } else {
+        // Normal food: Neon theo màu chủ đề mùa
+        ctx.shadowColor = currentTheme.food || "#FF5252";
+        ctx.shadowBlur = 6 + pulse * 14;
+    }
 
-    ctx.fillStyle = currentTheme.food;
-    ctx.beginPath();
-    ctx.arc(food.x * gridSize + gridSize / 2, food.y * gridSize + gridSize / 2, gridSize / 2 - 1.5, 0, Math.PI * 2);
-    ctx.fill();
+    if (food.img && food.img.complete && food.img.naturalWidth !== 0) {
+        ctx.drawImage(food.img, x, y, gridSize, gridSize);
+    } else {
+        ctx.fillStyle = food.isSpecial ? "#FFD700" : currentTheme.food;
+        ctx.beginPath();
+        ctx.arc(x + gridSize / 2, y + gridSize / 2, gridSize / 2 - 1.5, 0, Math.PI * 2);
+        ctx.fill();
+    }
 
     ctx.restore();
 }
@@ -423,7 +449,12 @@ function moveSnake() {
     snake.unshift(head);
 
     if (head.x === food.x && head.y === food.y) {
-        score += 10;
+        foodEatenCount++;
+        if (food.isSpecial) {
+            score += 20;
+        } else {
+            score += 10;
+        }
         updateScoreUI();
 
         if (score >= targetScore) {
@@ -447,6 +478,16 @@ function generateFood() {
         const isOnWall = currentGrid[food.y] && currentGrid[food.y][food.x] === 1;
         const isOnSnake = snake.some(p => p.x === food.x && p.y === food.y);
         if (!isOnWall && !isOnSnake) valid = true;
+    }
+
+    // Sau khi rắn ăn đủ 5 mồi (bội số của 5), xuất hiện Special Food
+    if (foodEatenCount > 0 && foodEatenCount % 5 === 0) {
+        food.isSpecial = true;
+        food.img = specialFoodImg;
+    } else {
+        food.isSpecial = false;
+        const randomIndex = Math.floor(Math.random() * normalFoodImages.length);
+        food.img = normalFoodImages[randomIndex];
     }
 }
 
