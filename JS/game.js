@@ -446,6 +446,22 @@ function hideLevelSelect() {
     document.getElementById("levelSelectModal").classList.add("hidden");
 }
 
+function showIosGuide() {
+    document.getElementById("iosGuideModal").classList.remove("hidden");
+}
+
+function hideIosGuide() {
+    document.getElementById("iosGuideModal").classList.add("hidden");
+}
+
+function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
+function isStandalone() {
+    return ('standalone' in window.navigator && window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
+}
+
 document.addEventListener("keydown", (e) => {
     if (e.key === "ArrowUp") changeDirection('UP');
     if (e.key === "ArrowDown") changeDirection('DOWN');
@@ -454,6 +470,11 @@ document.addEventListener("keydown", (e) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+    if (isIOS() && !isStandalone()) {
+        const iosBtn = document.getElementById("iosInstallBtn");
+        if (iosBtn) iosBtn.classList.remove("hidden");
+    }
+
     const buttons = document.querySelectorAll(".dpad-controls .btn");
     
     buttons.forEach(btn => {
@@ -472,4 +493,4 @@ document.addEventListener("DOMContentLoaded", () => {
             btn.classList.remove("active-touch");
         });
     });
-});
+});

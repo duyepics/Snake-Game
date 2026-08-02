@@ -13,6 +13,10 @@ body {
     overflow: hidden;
     width: 100vw;
     height: 100vh;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
 }
 
 .screen {
@@ -292,3 +296,83 @@ button.big-btn:active, .menu-buttons button:active {
     top: 20px;
     right: 20px;
 }
+
+/* STYLES HƯỚNG DẪN PWA TRÊN IOS */
+.ios-btn {
+    background-color: rgba(0, 122, 255, 0.15) !important;
+    border: 2px solid #007AFF !important;
+    color: #3899FF !important;
+    font-weight: bold;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    margin-top: 12px;
+    width: 90%;
+    max-width: 340px;
+    transition: all 0.3s ease;
+}
+
+.ios-btn:active {
+    background-color: #007AFF !important;
+    color: #fff !important;
+}
+
+.ios-modal {
+    border-color: #007AFF !important;
+    text-align: left !important;
+    max-width: 420px !important;
+}
+
+.ios-modal h2 {
+    color: #3899FF !important;
+    text-align: center;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+}
+
+.ios-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.step-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 8px;
+    border-left: 3px solid #007AFF;
+}
+
+.step-num {
+    background: #007AFF;
+    color: #fff;
+    font-weight: bold;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    font-size: 0.9rem;
+}
+
+.step-item p {
+    color: #E0E0E0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.step-item strong {
+    color: #3899FF;
+}
+
+.ios-icon {
+    font-size: 1.1rem;
+    vertical-align: middle;
+}

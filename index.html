@@ -2,7 +2,12 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Rắn Săn Mồi">
+    <link rel="apple-touch-icon" href="images/head.png">
+    <link rel="manifest" href="manifest.json">
     <title>Game Con Rắn Mobile</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -13,6 +18,33 @@
         <button class="music-toggle-btn start-mute-btn" onclick="toggleMute()" title="Tắt/Mở Tiếng">🔊</button>
         <h1>RẮN SĂN MỒI</h1>
         <button class="big-btn" onclick="enterGameFullscreen()">🎮 BẮT ĐẦU CHƠI</button>
+        <button id="iosInstallBtn" class="ios-btn hidden" onclick="showIosGuide()">📱 Chơi Full Screen trên iPhone (Add to Home)</button>
+    </div>
+
+    <!-- POPUP HƯỚNG DẪN THÊM VÀO MÀN HÌNH CHÍNH (IOS) -->
+    <div id="iosGuideModal" class="modal hidden">
+        <div class="modal-content ios-modal">
+            <h2>📱 HƯỚNG DẪN FULL SCREEN TRÊN IPHONE</h2>
+            <div class="ios-steps">
+                <div class="step-item">
+                    <span class="step-num">1</span>
+                    <p>Nhấn vào nút <strong>Chia sẻ</strong> <span class="ios-icon">📤</span> ở dưới thanh công cụ Safari.</p>
+                </div>
+                <div class="step-item">
+                    <span class="step-num">2</span>
+                    <p>Cuộn xuống chọn <strong>"Thêm vào Màn hình chính"</strong> (Add to Home Screen) <span class="ios-icon">➕</span>.</p>
+                </div>
+                <div class="step-item">
+                    <span class="step-num">3</span>
+                    <p>Nhấn <strong>"Thêm"</strong> (Add) ở góc trên màn hình.</p>
+                </div>
+                <div class="step-item">
+                    <span class="step-num">4</span>
+                    <p>Mở ứng dụng <strong>Rắn Săn Mồi</strong> ngoài Màn hình chính để trải nghiệm Toàn màn hình!</p>
+                </div>
+            </div>
+            <button class="close-btn" onclick="hideIosGuide()">Đã hiểu</button>
+        </div>
     </div>
 
     <!-- MÀN HÌNH CHỌN CHẾ ĐỘ -->
