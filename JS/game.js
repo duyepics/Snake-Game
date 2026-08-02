@@ -462,6 +462,25 @@ function isStandalone() {
     return ('standalone' in window.navigator && window.navigator.standalone) || window.matchMedia('(display-mode: standalone)').matches;
 }
 
+let isForceLandscape = false;
+
+function toggleForceLandscape() {
+    isForceLandscape = !isForceLandscape;
+    if (isForceLandscape) {
+        document.body.classList.add("force-landscape");
+    } else {
+        document.body.classList.remove("force-landscape");
+    }
+    updateForceLandscapeBtnUI();
+}
+
+function updateForceLandscapeBtnUI() {
+    const btns = document.querySelectorAll(".force-rotate-btn");
+    btns.forEach(btn => {
+        btn.innerText = isForceLandscape ? "🔄 Tắt ép xoay ngang" : "🔄 Ép xoay màn hình ngang (Cho iPhone)";
+    });
+}
+
 document.addEventListener("keydown", (e) => {
     if (e.key === "ArrowUp") changeDirection('UP');
     if (e.key === "ArrowDown") changeDirection('DOWN');

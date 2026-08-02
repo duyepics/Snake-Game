@@ -19,6 +19,7 @@
         <h1>RẮN SĂN MỒI</h1>
         <button class="big-btn" onclick="enterGameFullscreen()">🎮 BẮT ĐẦU CHƠI</button>
         <button id="iosInstallBtn" class="ios-btn hidden" onclick="showIosGuide()">📱 Chơi Full Screen trên iPhone (Add to Home)</button>
+        <button class="force-rotate-btn" onclick="toggleForceLandscape()">🔄 Ép xoay màn hình ngang (Cho iPhone)</button>
     </div>
 
     <!-- POPUP HƯỚNG DẪN THÊM VÀO MÀN HÌNH CHÍNH (IOS) -->
@@ -40,7 +41,11 @@
                 </div>
                 <div class="step-item">
                     <span class="step-num">4</span>
-                    <p>Mở ứng dụng <strong>Rắn Săn Mồi</strong> ngoài Màn hình chính để trải nghiệm Toàn màn hình!</p>
+                    <p>Mở ứng dụng <strong>Rắn Săn Mồi</strong> từ Màn hình chính.</p>
+                </div>
+                <div class="step-item">
+                    <span class="step-num">5</span>
+                    <p>Tắt <strong>Khóa xoay màn hình</strong> trong Control Center của iPhone hoặc dùng nút <strong>"Ép xoay ngang"</strong> trong game.</p>
                 </div>
             </div>
             <button class="close-btn" onclick="hideIosGuide()">Đã hiểu</button>
@@ -121,6 +126,16 @@
                 </div>
                 <button class="btn btn-down" onclick="changeDirection('DOWN')">▼</button>
             </div>
+        </div>
+    </div>
+
+    <!-- OVERLAY CẢNH BÁO YÊU CẦU XOAY MÀN HÌNH NÓI CHUNG (DÀNH CHO IOS / PORTRAIT) -->
+    <div id="orientationOverlay" class="orientation-modal">
+        <div class="orientation-content">
+            <div class="phone-rotate-icon">📱</div>
+            <h2>VUI LÒNG XOAY NGANG MÀN HÌNH</h2>
+            <p>Trải nghiệm game Rắn Săn Mồi tốt nhất ở chế độ nằm ngang.</p>
+            <button class="force-rotate-btn" onclick="toggleForceLandscape()">🔄 Bật/Tắt xoay ngang bằng CSS (Cho iPhone bị khóa xoay)</button>
         </div>
     </div>
 

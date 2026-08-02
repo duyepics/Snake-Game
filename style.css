@@ -375,4 +375,102 @@ button.big-btn:active, .menu-buttons button:active {
 .ios-icon {
     font-size: 1.1rem;
     vertical-align: middle;
+}
+
+/* NÚT ÉP XOAY MÀN HÌNH CHẤT LƯỢNG CAO */
+.force-rotate-btn {
+    background-color: rgba(76, 175, 80, 0.15);
+    border: 2px solid #4CAF50;
+    color: #81C784;
+    font-weight: bold;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.2);
+}
+
+.force-rotate-btn:active {
+    background-color: #4CAF50;
+    color: #000;
+    transform: scale(0.96);
+}
+
+/* OVERLAY CẢNH BÁO YÊU CẦU XOAY MÀN HÌNH NÓI CHUNG */
+.orientation-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-color: rgba(13, 13, 13, 0.96);
+    z-index: 10000;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.orientation-content {
+    background: #151515;
+    border: 2px solid #4CAF50;
+    border-radius: 16px;
+    padding: 28px 20px;
+    max-width: 360px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 0 25px rgba(76, 175, 80, 0.3);
+}
+
+.phone-rotate-icon {
+    font-size: 3.5rem;
+    margin-bottom: 15px;
+    animation: rotatePhoneAnim 2.5s infinite ease-in-out;
+}
+
+@keyframes rotatePhoneAnim {
+    0% { transform: rotate(0deg); }
+    40%, 60% { transform: rotate(90deg); }
+    100% { transform: rotate(0deg); }
+}
+
+.orientation-content h2 {
+    font-size: 1.2rem;
+    color: #4CAF50;
+    margin-bottom: 10px;
+}
+
+.orientation-content p {
+    font-size: 0.9rem;
+    color: #CCC;
+    line-height: 1.4;
+    margin-bottom: 18px;
+}
+
+/* HIỂN THỊ OVERLAY KHI MÀN HÌNH Ở DẠNG DỌC (PORTRAIT) NẾU CHƯA ÉP XOAY */
+@media screen and (orientation: portrait) {
+    body:not(.force-landscape) .orientation-modal {
+        display: flex !important;
+    }
+}
+
+/* ÉP XOAY MÀN HÌNH NGANG BẰNG CSS (DÀNH CHO IPHONE BỊ KHÓA XOAY MÀN HÌNH DỌC) */
+body.force-landscape {
+    width: 100vh !important;
+    height: 100vw !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) rotate(90deg) !important;
+    transform-origin: center center !important;
+    overflow: hidden !important;
+}
+
+body.force-landscape .orientation-modal {
+    display: none !important;
 }
