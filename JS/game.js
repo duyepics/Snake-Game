@@ -20,9 +20,9 @@ const GAME_SPEED = 550;
 
 // HỆ THỐNG ÂM NHẠC & PLAYLIST
 const musicTracks = [
-    "musics/001 - Khiem Nhuong (Short Edit).mp3",
-    "musics/YTDown.com_YouTube_passion-Speed-Up_Media_JorKkcHLH_A_009_128k (1).mp3",
-    "musics/YTDown_YouTube_Media_mHKY1ggWW3c_008_128k.mp3"
+    "musics/track1.mp3",
+    "musics/track2.mp3",
+    "musics/track3.mp3"
 ];
 
 let playlist = [];
