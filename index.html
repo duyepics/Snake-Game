@@ -10,6 +10,7 @@
 
     <!-- MÀN HÌNH BAN ĐẦU -->
     <div id="startScreen" class="screen">
+        <button class="music-toggle-btn start-mute-btn" onclick="toggleMute()" title="Tắt/Mở Tiếng">🔊</button>
         <h1>RẮN SĂN MỒI</h1>
         <button class="big-btn" onclick="enterGameFullscreen()">🎮 BẮT ĐẦU CHƠI</button>
     </div>
@@ -20,6 +21,7 @@
         <div class="menu-buttons">
             <button onclick="showLevelSelect()">CHỌN LEVEL (1 - 15)</button>
             <button onclick="startRandomGame()">CHƠI NGẪU NHIÊN</button>
+            <button onclick="toggleMute()" class="music-menu-btn">🔊 TẮT / MỞ TIẾNG</button>
             <button class="exit-fs-btn" onclick="exitGameFullscreen()">⤢ THOÁT TOÀN MÀN HÌNH</button>
         </div>
     </div>
@@ -40,6 +42,7 @@
             <div class="menu-buttons">
                 <button onclick="resumeGame()">▶ TIẾP TỤC CHƠI</button>
                 <button onclick="restartCurrentLevel()">🔄 CHƠI LẠI MÀN NÀY</button>
+                <button onclick="toggleMute()" class="music-menu-btn">🔊 TẮT / MỞ TIẾNG</button>
                 <button onclick="exitToMenu()">◄ VỀ MENU CHÍNH</button>
                 <button class="exit-fs-btn" onclick="exitGameFullscreen()">⤢ THOÁT TOÀN MÀN HÌNH</button>
             </div>
@@ -72,7 +75,10 @@
                     <span class="score-label">Điểm:</span>
                     <span id="scoreInfo" class="score-value">0/100</span>
                 </div>
-                <button class="menu-icon-btn" onclick="openPauseMenu()">☰</button>
+                <div class="action-btns">
+                    <button class="music-toggle-btn" onclick="toggleMute()" title="Tắt/Mở Tiếng">🔊</button>
+                    <button class="menu-icon-btn" onclick="openPauseMenu()">☰</button>
+                </div>
             </div>
 
             <div class="dpad-controls">

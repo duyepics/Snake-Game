@@ -18,6 +18,76 @@ let isPaused = false;
 let currentTheme = THEMES.SPRING; // Mặc định Mùa Xuân
 const GAME_SPEED = 550;
 
+// HỆ THỐNG ÂM NHẠC & PLAYLIST
+const musicTracks = [
+    "musics/001 - Khiem Nhuong (Short Edit).mp3",
+    "musics/YTDown.com_YouTube_passion-Speed-Up_Media_JorKkcHLH_A_009_128k (1).mp3",
+    "musics/YTDown_YouTube_Media_mHKY1ggWW3c_008_128k.mp3"
+];
+
+let playlist = [];
+let currentTrackIndex = 0;
+const bgMusic = new Audio();
+let isMuted = false;
+let isMusicStarted = false;
+
+// Tráo đổi ngẫu nhiên danh sách nhạc 3 bài (Fisher-Yates Shuffle)
+function shufflePlaylist() {
+    playlist = [...musicTracks];
+    for (let i = playlist.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [playlist[i], playlist[j]] = [playlist[j], playlist[i]];
+    }
+    currentTrackIndex = 0;
+}
+
+// Bắt đầu phát nhạc ngẫu nhiên khi người dùng bấm Bắt đầu chơi
+function startMusic() {
+    if (!isMusicStarted) {
+        shufflePlaylist();
+        isMusicStarted = true;
+        playCurrentTrack();
+    } else if (bgMusic.paused && !isMuted) {
+        bgMusic.play().catch(() => {});
+    }
+}
+
+// Phát bài hát theo chỉ số hiện tại
+function playCurrentTrack() {
+    if (playlist.length === 0) return;
+    bgMusic.src = playlist[currentTrackIndex];
+    bgMusic.muted = isMuted;
+    bgMusic.play().catch(() => {});
+}
+
+// Khi hết bài -> tự động chuyển bài tiếp theo (hết 3 bài thì tráo lượt mới)
+bgMusic.addEventListener("ended", () => {
+    currentTrackIndex++;
+    if (currentTrackIndex >= playlist.length) {
+        shufflePlaylist();
+    }
+    playCurrentTrack();
+});
+
+// Bật / Tắt tiếng
+function toggleMute() {
+    isMuted = !isMuted;
+    bgMusic.muted = isMuted;
+    updateMuteUI();
+}
+
+// Cập nhật giao diện nút Mute
+function updateMuteUI() {
+    document.querySelectorAll(".music-toggle-btn").forEach(btn => {
+        btn.innerText = isMuted ? "🔇" : "🔊";
+        if (isMuted) btn.classList.add("muted");
+        else btn.classList.remove("muted");
+    });
+    document.querySelectorAll(".music-menu-btn").forEach(btn => {
+        btn.innerText = isMuted ? "🔇 MỞ TIẾNG" : "🔊 TẮT TIẾNG";
+    });
+}
+
 // HÀM ĐỔI MÀU GIAO DIỆN VÀ GAME THEO CHỦ ĐỀ MÙA
 function applyRandomTheme() {
     const themeKeys = Object.keys(THEMES);
@@ -28,8 +98,8 @@ function applyRandomTheme() {
     canvas.style.borderColor = currentTheme.border;
     canvas.style.backgroundColor = currentTheme.bg;
 
-    // 2. Đổi màu chữ, nút Menu, D-pad bên phải
-    document.querySelectorAll(".score-label, .score-value, .menu-icon-btn, .btn").forEach(el => {
+    // 2. Đổi màu chữ, nút Menu, D-pad & Nút âm nhạc
+    document.querySelectorAll(".score-label, .score-value, .menu-icon-btn, .btn, .music-toggle-btn").forEach(el => {
         el.style.color = currentTheme.border;
         el.style.borderColor = currentTheme.border;
     });
@@ -48,6 +118,7 @@ function applyRandomTheme() {
 }
 
 function enterGameFullscreen() {
+    startMusic(); // Phát nhạc ngẫu nhiên khi bấm Bắt đầu chơi
     if (document.documentElement.requestFullscreen) {
         document.documentElement.requestFullscreen().catch(() => {});
     }
@@ -93,6 +164,7 @@ function renderLevelGrid() {
 }
 
 function startGame(level) {
+    startMusic();
     currentLevel = level;
     targetScore = MAPS[level].targetScore;
     currentGrid = MAPS[level].grid;

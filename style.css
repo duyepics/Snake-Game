@@ -252,3 +252,43 @@ button.big-btn:active, .menu-buttons button:active {
     background-color: #FF5252 !important;
     color: #fff !important;
 }
+
+/* THÊM NÚT ÂM NHẠC & TẮT MỞ TIẾNG */
+.action-btns {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.music-toggle-btn {
+    background-color: transparent;
+    border: 2px solid #4CAF50;
+    color: #4CAF50;
+    font-size: 1.3rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
+    transition: all 0.3s ease;
+}
+
+.music-toggle-btn:active {
+    transform: scale(0.9);
+}
+
+.music-toggle-btn.muted {
+    opacity: 0.5;
+    filter: grayscale(1);
+    border-color: #888 !important;
+    color: #888 !important;
+}
+
+.start-mute-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
